@@ -1,7 +1,10 @@
-console.log process.env.PORT
 port = Number(process.env.PORT || 3000)
 
 require("zappa") port, ->
+	@register html: require('ejs')
+	@set 'view engine': 'html', 'views': __dirname + "/views", 'view options': { layout: false }
+
 	@app.get '/', (req, res) ->
-		res.send 'boring! test!!! ektaAdd some excitement'
+		#res.send 'boring! Lets watch movie' + __dirname + "\\views"
+		res.render 'index', {}
 

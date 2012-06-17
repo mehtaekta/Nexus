@@ -2,7 +2,7 @@
   "name":    "nexus-plus",
   "version": "0.0.1",
 
-  "description": "Template app for Heroku / Facebook integration, Node.js language",
+  "description": "Nexus Movies",
 
   "dependencies": {
     "async":     "0.1.18",
@@ -10,7 +10,8 @@
     "express":   "2.4.6",
     "faceplate": "0.0.4",
     "coffee-script": "1.3.3",
-    "zappa": "0.3.1"
+    "zappa": "0.3.1",
+    "hogan.js": "2.0.0"
   },
 
   "engines": {
