@@ -6,5 +6,5 @@ require("zappa") port, ->
 
 	@app.get '/', (req, res) ->
 		#res.send 'boring! Lets watch movie' + __dirname + "\\views"
-		res.render 'index', {}
+		res.json 'index': { FirstName: 'Ekta', LastName: 'Mehta'}
 
