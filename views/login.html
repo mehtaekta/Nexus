@@ -1,0 +1,29 @@
+<!-- TODO: change url of image -->
+<div>
+  <form id="login" name="login" action="login" method="POST">
+    <div>
+      <div><label class='serverError'>{{errorMsg}}</label></div>
+      <span>
+        <input id="email" name="Email" type="email" />
+      </span>
+      <span>
+        <input id="password" name="Password" type="password" placeholder="Password"/>
+      </span>
+      <div>
+        <div class='center'>
+          <label class="checkbox " id="remember">
+            <input type="checkbox" name="remember" id="rememberCB"/>Remember my email
+          </label>
+        </div>
+      </div>
+      <button id="loginSubmit" type="submit">Sign In</button>
+      <input id="returnURL" name="returnURL" type="hidden" value="{{returnURL}}"/>
+    </div>
+  </form>
+</div>
+<footer id="footer">
+    <div class="center">
+     Copyright <span id='footer_year'></span> Nexus, Inc.<br/>
+     All rights reserved
+    </div>
+</footer>
