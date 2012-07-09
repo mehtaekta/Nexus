@@ -15,22 +15,44 @@ $(function() {
 var AppView = Backbone.View.extend({
 	el: $("div#nexus-content"),
 
-	// initialize: function(){
-	// 	this.model.on("change", this.render, this),
+	// defaults: function()
+	// {
+	// 	alert(this.$el);
 	// },
 
+	initialize: function(){
+		this.model.on("change", this.render, this);
+	},
+
+	_mustacheRender: function(template, payload){
+		var output = Mustache.render(template, payload);
+		alert(output);
+		this.model.set({content:output,timestamp:new Date()});
+	},
+
 	render: function(){
-		alert($el);
-		this.$el.html("<h1>Hello Testing 123</h1>");
+		var mustacheTemplateName = "/" + this.model.get("mustacheTemplateName");
+		alert(mustacheTemplateName);
+		var payload = this.model.get("payload");
+		$.get(mustacheTemplateName, function(template) {
+			alert(template)
+			this._mustacheRender(template, payload);
+		});
+
+		//alert(this.model.get("content"));
+		this.$el.html(this.model.get("content"));
 	}
 
 });
 
 var AppModel = Backbone.Model.extend({
 
-	// defaults: function() {
-	// 	content = {}
-	// },
+	defaults: {
+		mustacheTemplateName: "index",
+		payload: {},
+		pageTitle: "Nexus",
+		content: ""
+	},           
 });
 
 var AppRouter = Backbone.Router.extend({
@@ -49,10 +71,13 @@ var AppRouter = Backbone.Router.extend({
 	},
 
 	fetchContent: function(action){
-		alert(action);
-		appModel.set({url:"./"+ action});
+		//alert(action);
+		if(action === "" || action === "/")
+			appModel.url = "/";
+		else
+			appModel.url="/"+ action;
+
 		appModel.fetch();
-		//appView.render();
 	}
 
 });

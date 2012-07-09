@@ -15,8 +15,8 @@ require("zappa") port, ->
 	@get '/api/:name':->
 		res = @response
 		console.log "api"
-		#res.json({mustacheTemplateName: 'login.html', payload: {}, pageTitle: 'Login'})
+		res.json({mustacheTemplateName: 'login.html', payload: { FirstName: 'Ekta', LastName: 'Mehta'}, pageTitle: 'Login'})
 		#res.json({data: {email:'mehta.ekta@gmail.com', password: 'ekta123'}})
 		#res.send 'boring! Lets watch movie' + __dirname + "\\views"
-		res.render 'index.html' #: { FirstName: 'Ekta', LastName: 'Mehta'}
+		#res.render 'index.html' #: { FirstName: 'Ekta', LastName: 'Mehta'}
 
