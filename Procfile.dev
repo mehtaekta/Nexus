@@ -1,3 +1,2 @@
-web: ./node_modules/.bin/coffee server.coffee
+web: supervisor -e coffee -x ./node_modules/.bin/coffee server.coffee
 log: tail -f logs/development.log
-watchr: sudo ./build.watchr &

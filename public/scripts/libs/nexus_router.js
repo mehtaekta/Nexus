@@ -1,46 +1,43 @@
 $(function() {
-	//alert("in jquery");
 	// Instantiate the router
 	var app_router = new AppRouter();
 
-	//Start Backbone history a neccesary step for bookmarkable URL's
+	// Start Backbone history a neccesary step for bookmarkable URL's
 	if (typeof(window.history.pushState) == 'function') {
 		Backbone.history.start({pushState: true});
 	} else {
 		Backbone.history.start();
 	}
-	
 });
 
-var AppView = Backbone.View.extend({
-	el: $("div#nexus-content"),
+var Nexus = {};
+Nexus.templateDir = '/views/templates/';	
 
-	// defaults: function()
-	// {
-	// 	alert(this.$el);
-	// },
+var AppView = Backbone.View.extend({
+	el: $('#nexus-content'),
 
 	initialize: function(){
-		this.model.on("change", this.render, this);
+		this.model.on('change', this.render, this);
 	},
 
 	_mustacheRender: function(template, payload){
 		var output = Mustache.render(template, payload);
-		alert(output);
-		this.model.set({content:output,timestamp:new Date()});
+		this.model.set({content: output, timestamp : new Date()});
+	},
+
+	_setModelContent: function(){
+		var _this = this;
+		var mustacheTemplateName = Nexus.templateDir + _this.model.get("mustacheTemplateName");
+		
+		var payload = _this.model.get("payload");
+		$.get(mustacheTemplateName, function(template) {
+			_this._mustacheRender(template, payload);	
+		});		
 	},
 
 	render: function(){
-		var mustacheTemplateName = "/" + this.model.get("mustacheTemplateName");
-		alert(mustacheTemplateName);
-		var payload = this.model.get("payload");
-		$.get(mustacheTemplateName, function(template) {
-			alert(template)
-			this._mustacheRender(template, payload);
-		});
-
-		//alert(this.model.get("content"));
-		this.$el.html(this.model.get("content"));
+		alert(this.model.get('content'));
+		this.$el.html(this.model.get("content"));		
 	}
 
 });
@@ -48,7 +45,7 @@ var AppView = Backbone.View.extend({
 var AppModel = Backbone.Model.extend({
 
 	defaults: {
-		mustacheTemplateName: "index",
+		mustacheTemplateName: "login",
 		payload: {},
 		pageTitle: "Nexus",
 		content: ""
@@ -78,6 +75,7 @@ var AppRouter = Backbone.Router.extend({
 			appModel.url="/"+ action;
 
 		appModel.fetch();
+		appView._setModelContent();
 	}
 
 });

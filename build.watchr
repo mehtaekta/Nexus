@@ -18,7 +18,11 @@ end
 
 #copy & restart function
 def restart_foreman()
-    system("Ctrl + c")
-    #system("Ctrl + c")
+    puts "restart foreman"
+    #system("CTRL + C")
+    #system("CTRL + C")
+    proc_close()
+    sleep 3
     system("foreman start -f Procfile.dev")
+    puts "restart complete"
 end

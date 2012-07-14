@@ -3,14 +3,14 @@ port = Number(process.env.PORT || 3000)
 require("zappa") port, ->
 	single_page = require('./middleware/nexus_single_page');
 
-	@register html: require('ejs')
-	@set 'view engine': 'html', 'views': __dirname + "/views", 'view options': { layout: false }
+	@register html: require('ejs') #'view engine': 'html', 
+	@set 'views': __dirname + "/public/views", 'view options': { layout: false }
 
 	@use static: __dirname + '/public',
 		single_page({ indexPage: 'index.html'}),
 
-	@get '/logon': ->
-		@response.json({mustacheTemplateName: 'login.html', payload: {}, pageTitle: 'Login'})
+	# @get '/logon': ->
+	# 	@response.json({mustacheTemplateName: 'login.html', payload: {}, pageTitle: 'Login'})
 	
 	@get '/api/:name':->
 		res = @response
