@@ -1,6 +1,6 @@
 port = Number(process.env.PORT || 3000)
 
-require("zappa") port, ->
+require("zappajs") port, ->
 	single_page = require('./middleware/nexus_single_page');
 
 	@register html: require('ejs') 
