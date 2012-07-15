@@ -14,7 +14,7 @@ var Nexus = {};
 Nexus.templateDir = '/views/templates/';	
 
 var AppView = Backbone.View.extend({
-	el: $('#nexus-content'),
+	el: $('#nexus-container'),
 
 	initialize: function(){
 		this.model.on('change', this.render, this);
@@ -27,7 +27,7 @@ var AppView = Backbone.View.extend({
 
 	_setModelContent: function(){
 		var _this = this;
-		var mustacheTemplateName = Nexus.templateDir + _this.model.get("mustacheTemplateName");
+		var mustacheTemplateName = Nexus.templateDir + _this.model.get("mustacheTemplateName") + '.html';
 		
 		var payload = _this.model.get("payload");
 		$.get(mustacheTemplateName, function(template) {
@@ -36,7 +36,6 @@ var AppView = Backbone.View.extend({
 	},
 
 	render: function(){
-		alert(this.model.get('content'));
 		this.$el.html(this.model.get("content"));		
 	}
 
@@ -70,12 +69,14 @@ var AppRouter = Backbone.Router.extend({
 	fetchContent: function(action){
 		//alert(action);
 		if(action === "" || action === "/")
-			appModel.url = "/";
+			appModel.url = "/logon";
 		else
+		{
 			appModel.url="/"+ action;
-
+		}
 		appModel.fetch();
 		appView._setModelContent();
 	}
 
 });
+
