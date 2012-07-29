@@ -10,8 +10,9 @@ require("zappajs") port, ->
 		single_page({ indexPage: 'views/index.html'}),
 
 	@get '/logon': ->
+		res = @response
 		console.log "logon"
-		@response.json({mustacheTemplateName: 'login', payload: {FirstName: 'Ekta', LastName: 'Mehta'}, pageTitle: 'Login'})
+		res.json({mustacheTemplateName: 'login', payload: { email: 'mehta.ekta@gmail.com', LastName: 'Mehta' }, pageTitle: 'Login'})
 	
 	@get '/api/:name':->
 		res = @response

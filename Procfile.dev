@@ -1,3 +1,2 @@
-lessc: supervisor -e less -x ./node_modules/.bin/lessc less/style.less > ./public/stylesheets/style.css
 web: supervisor -e coffee -x ./node_modules/.bin/coffee server.coffee
 worker: tail -f logs/development.log
