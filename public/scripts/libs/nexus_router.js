@@ -30,17 +30,19 @@ var AppView = Backbone.View.extend({
 		var mustacheTemplateName = Nexus.templateDir + _this.model.get("mustacheTemplateName") + '.html';
 		
 		var payload = _this.model.get("payload");
-		console.log('mustacheTemplateName =	', mustacheTemplateName);
-		console.log('payload =	', payload);
+		// console.log('mustacheTemplateName =	', mustacheTemplateName);
+		// console.log('payload =	', payload);
 		$.get(mustacheTemplateName, function(template) {
-			_this._mustacheRender(template, payload);	
+			_this.model.set({template:template})
+			// _this._mustacheRender(template, payload);	
 		});		
 	},
 
 	render: function(){
-		// console.log(this.model.get("content"));
-		this._setModelContent();
-		this.$el.html(this.model.get("content"));		
+		this.$el.html(this.model.get("template"));	
+		modelBinder = new ModelBinder();
+		modelBinder.bind(this.model, this.$el);
+			
 	}
 
 });
@@ -51,11 +53,14 @@ var AppModel = Backbone.Model.extend({
 		mustacheTemplateName: "login",
 		payload: {},
 		pageTitle: "Nexus",
-		content: ""
+		content: "",
+		template: ""
 	},        
 	initialize: function() {
 
 	}
+
+	
 });
 
 var AppRouter = Backbone.Router.extend({
@@ -73,13 +78,20 @@ var AppRouter = Backbone.Router.extend({
 	},
 
 	fetchContent: function(action){
+		console.log('Router action', action);
 		if(action === "" || action === "/")
 			appModel.url = "/logon";
 		else
 		{
 			appModel.url="/"+ action;
 		}
-		appModel.fetch();		
+		appModel.fetch({
+			success: function(model, response) {
+				// console.log('response', model, response);
+				appView._setModelContent();
+			}
+    	});	
+		
 	}
 
 });

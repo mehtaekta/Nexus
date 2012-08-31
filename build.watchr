@@ -1,27 +1,15 @@
-# Copy Changed Files & Restart Stew
-watch(".*") do |match|
-    restart_foreman
-end
-
 # Compile Less:
 watch("less/.*\.less$") do |match|
     puts "updating less styles."
+    system("lessc less/style.less > public/stylesheets/style.css")
     restart_foreman
 end
-
-# Compile Coffee:
-watch(".*\.coffee") do |match|
-    puts "compiling coffee."
-    restart_foreman 
-end
-
 
 #copy & restart function
 def restart_foreman()
     puts "restart foreman"
-    #system("CTRL + C")
-    #system("CTRL + C")
-    proc_close()
+    system("CTRL + C")
+    system("CTRL + C")
     sleep 3
     system("foreman start -f Procfile.dev")
     puts "restart complete"

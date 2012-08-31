@@ -1,4 +1,5 @@
 port = Number(process.env.PORT || 3000)
+data = require('./businesslayer/stubData').data
 
 require("zappajs") port, ->
 	single_page = require('./middleware/nexus_single_page');
@@ -9,15 +10,21 @@ require("zappajs") port, ->
 	@use static: __dirname + '/public',
 		single_page({ indexPage: 'views/index.html'}),
 
-	@get '/logon': ->
-		res = @response
-		console.log "logon"
-		res.json({mustacheTemplateName: 'login', payload: { email: 'mehta.ekta@gmail.com', LastName: 'Mehta' }, pageTitle: 'Login'})
+	# @get '/logon': ->
+	# 	res = @response
+	# 	console.log "logon in ", data.logon
+	# 	res.json({mustacheTemplateName: 'login', payload: data['logon'], pageTitle: 'Login'})
 	
-	@get '/api/:name':->
+	@get '/:action/:name?':->
 		res = @response
-		console.log "api"
-		res.json({mustacheTemplateName: 'profile', payload: { FirstName: 'Ekta', LastName: 'Mehta'}, pageTitle: 'Login'})
+		req = @request
+
+		action = req.params.action
+		if req.params.name
+			action = req.params.name
+
+		console.log "api", action, data[action]
+		res.json({mustacheTemplateName: action, payload: data[action], pageTitle: action})
 		#res.json({data: {email:'mehta.ekta@gmail.com', password: 'ekta123'}})
 		#res.send 'boring! Lets watch movie' + __dirname + "\\views"
 		#res.render 'index.html' #: { FirstName: 'Ekta', LastName: 'Mehta'}
