@@ -97,22 +97,34 @@ _.extend(Nexus.ModelBinder.prototype, {
 		_.each(_this.modelData, function(value, key){
 			el_Id = '#'+key;
 			viewEl = $(el).find(el_Id);
-			// console.log(viewEl);
+			// console.log($(viewEl).prop('type'));
 
 			if(!_.isUndefined(viewEl))
 			{
-
-				if($(viewEl).prop("type") == 'date')
-					value = $.format.date(new Date(value), 'yyyy-MM-dd');
-
-				// console.log($(viewEl).prop('tagName'));
-				
+				//SELECT
 				if($(viewEl).prop('tagName') == 'SELECT') {
 					_this.dataSource = _this.modelData[$(viewEl).data("source")];
-					_this.bindSelectOptions(_this.dataSource, value, viewEl, null);
+					if(_.isObject(_this.dataSource))
+						_this.bindSelectOptions(_this.dataSource, value, viewEl, null);
+						return;
 				}
 
-				viewEl.val(value);
+				//Checkbox
+				if($(viewEl).prop('type') == 'checkbox') {
+					$(viewEl).attr('checked', value);
+					return;
+				}
+
+				//INPUT
+				if($(viewEl).prop('tagName') == 'INPUT') {
+					if(_.isString(value)) {
+						if($(viewEl).prop("type") == 'date')
+							value = $.format.date(new Date(value), 'yyyy-MM-dd');
+						
+						viewEl.val(value);
+					}
+				}
+
 			}
 		});
 
