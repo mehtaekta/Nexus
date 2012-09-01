@@ -1,0 +1,33 @@
+<!-- TODO: change url of image -->
+<div>
+  <form class="form-horizontal" id="login" name="login" action="login" method="POST">
+    <fieldset>
+      <legend>Login</legend>
+      <div><label class='serverError'>{{errorMsg}}</label></div>
+      <div class="control-group">
+        <label class="control-label" for="email">Email: </label>
+        <div class="controls">
+          <input id="email" name="email" type="email" value={{email}} />
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="password">Password: </label>
+        <div class="controls">
+          <input id="password" name="password" type="password" />
+        </div>
+      </div>
+       <div class="control-group">
+          <div class="controls">
+            <label class="checkbox">
+              <input id="optionRemember" type="checkbox" value="{{rememberMe}}">
+              Remember Me
+            </label>
+          </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">Login</button>
+        <button class="btn">Cancel</button>
+      </div>
+    </fieldset>    
+  </form>
+</div>

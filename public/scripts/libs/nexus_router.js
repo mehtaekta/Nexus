@@ -10,8 +10,7 @@ $(function() {
 	}
 });
 
-var Nexus = {};
-Nexus.templateDir = '/views/templates/';	
+
 
 var AppView = Backbone.View.extend({
 	el: $('#nexus-container'),
@@ -40,7 +39,9 @@ var AppView = Backbone.View.extend({
 
 	render: function(){
 		this.$el.html(this.model.get("template"));	
-		modelBinder = new ModelBinder();
+		modelBinder = new Nexus.ModelBinder();
+		console.log(modelBinder);
+		// debugger;
 		modelBinder.bind(this.model, this.$el);
 			
 	}
