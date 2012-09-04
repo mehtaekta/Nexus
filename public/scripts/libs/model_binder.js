@@ -43,8 +43,9 @@ _.extend(Nexus.ModelBinder.prototype, {
 		_.each(_this.modelData, function(value, key){
 			el_Id = '#'+key;
 			viewEl = $(el).find(el_Id);
-			console.log('Element type and tagName' , $(viewEl).prop('type'), $(viewEl).prop('tagName'));
+			// console.log('Element type and tagName' , $(viewEl).prop('type'), $(viewEl).prop('tagName'));
 
+			//TODO refactor to switch case???
 			if(!_.isUndefined(viewEl))
 			{
 				//SELECT
@@ -64,7 +65,7 @@ _.extend(Nexus.ModelBinder.prototype, {
 				//INPUT
 				if($(viewEl).prop('tagName') == 'INPUT') {
 					//Checkbox or RadioButton
-					if($(viewEl).prop('type') == 'checkbox' || $(viewEl).prop('type') == 'radiobutton') {
+					if(($(viewEl).prop('type') == 'checkbox' || $(viewEl).prop('type') == 'radiobutton') && _.isBoolean(value)) {
 						$(viewEl).attr('checked', value);
 						return;
 					}

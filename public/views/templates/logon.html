@@ -3,17 +3,17 @@
   <form class="form-horizontal" id="login" name="login" action="login" method="POST">
     <fieldset>
       <legend>Login</legend>
-      <div><label class='serverError'>{{errorMsg}}</label></div>
+      <!-- <div><label class='serverError'>{{errorMsg}}</label></div> -->
       <div class="control-group">
         <label class="control-label" for="email">Email: </label>
         <div class="controls">
-          <input id="email" name="email" type="email" />
+          <input id="email" name="email" required type="email" title="Email is Required!"  />
         </div>
       </div>
       <div class="control-group">
         <label class="control-label" for="password">Password: </label>
         <div class="controls">
-          <input id="password" name="password" type="password" />
+          <input id="password" name="password" required type="password" title="Password is Required!"  />
         </div>
       </div>
        <div class="control-group">

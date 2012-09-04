@@ -40,7 +40,7 @@ var AppView = Backbone.View.extend({
 
 	render: function(){
 		this.$el.html(this.model.get("template"));	
-		console.log(this.modelBinder);
+		// console.log(this.modelBinder);
 		// debugger;
 		this.modelBinder.bind(this.model, this.$el);
 			
@@ -61,10 +61,10 @@ var AppModel = Backbone.Model.extend({
 
 	},
 
-	validate: function(attrs) {
-		// console.log('attrs', attrs);
-	 //    return Nexus.validateAttributes(attrs);
-	}
+	// validate: function(attrs) {
+	// 	console.log('attrs', attrs);
+	//  //    return Nexus.validateAttributes(attrs);
+	// }
 
 	
 });
