@@ -3,11 +3,12 @@
 	<form class="form-horizontal" id="register" name="register" action="account/register" method="POST">
 	    <fieldset>
 	      	<legend>Register</legend>
-	      	<div><label class='serverError'>{{errorMsg}}</label></div>
+	      	<!-- <div><label class='serverError'>{{errorMsg}}</label></div> -->
+	      	<div id="infoText" name="infoText"></div>
 	      	<div class="control-group">
 	        	<label class="control-label" for="firstName">First Name: </label>
 	        	<div class="controls">
-	          		<input id="firstName" name="firstName" class="span2" type="time" />
+	          		<input id="firstName" name="firstName" class="span2" type="text" />
 	        	</div>
 	      	</div>
 	      	<div class="control-group">

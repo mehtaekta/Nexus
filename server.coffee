@@ -20,4 +20,8 @@ require("zappajs") port, ->
 
 		# console.log "api", action, data[action]
 		res.json({mustacheTemplateName: action, payload: data[action], pageTitle: action})
+
+	@post '/:action/:name?' :->
+		res = @response
+		req = @request
 		

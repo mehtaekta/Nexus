@@ -16,6 +16,7 @@ var AppView = Backbone.View.extend({
 	el: $('#nexus-container'),
 
 	initialize: function(){
+		this.modelBinder = new Nexus.ModelBinder();
 		this.model.on('change', this.render, this);
 	},
 
@@ -39,10 +40,9 @@ var AppView = Backbone.View.extend({
 
 	render: function(){
 		this.$el.html(this.model.get("template"));	
-		modelBinder = new Nexus.ModelBinder();
-		console.log(modelBinder);
+		console.log(this.modelBinder);
 		// debugger;
-		modelBinder.bind(this.model, this.$el);
+		this.modelBinder.bind(this.model, this.$el);
 			
 	}
 
@@ -59,6 +59,11 @@ var AppModel = Backbone.Model.extend({
 	},        
 	initialize: function() {
 
+	},
+
+	validate: function(attrs) {
+		// console.log('attrs', attrs);
+	 //    return Nexus.validateAttributes(attrs);
 	}
 
 	
