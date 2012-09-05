@@ -1,8 +1,14 @@
+
+
 Nexus.ModelBinder=function(options){
 	this.options =  _.extend({},options);
 };
 
-// used prototype to add a bind method to ModelBinder object
+Nexus.ModelBinder.defaultDataFormat = "dd/MM/yyyy"; //Date Format
+Nexus.ModelBinder.defaultDataTimeFormat = "dd/MM/yyyy hh:mm:ss"; //Date Time format
+// Nexus.ModelBinder.emailPattern = ""; //email pattern to validate
+
+// bind method to ModelBinder object
 _.extend(Nexus.ModelBinder.prototype, {
 	bindSelectOptions:function(dataSource, selectedValue, selectEl, callback){
 		optionsData =  _.extend({}, dataSource);
@@ -16,7 +22,6 @@ _.extend(Nexus.ModelBinder.prototype, {
 		if (_.isUndefined(selectedValue)==false){
 			selectedOption = $.grep(resultSet, function (option) { return option.key == selectedValue; });
 			if (selectedOption.length > 0){
-				console.log('selectedOption', selectedOption);
 				selectedOption[0]['selected'] =true
 			}
 		}
@@ -64,16 +69,22 @@ _.extend(Nexus.ModelBinder.prototype, {
 
 				//INPUT
 				if($(viewEl).prop('tagName') == 'INPUT') {
-					//Checkbox or RadioButton
+					//if INPUT type = Checkbox or RadioButton
 					if(($(viewEl).prop('type') == 'checkbox' || $(viewEl).prop('type') == 'radiobutton') && _.isBoolean(value)) {
 						$(viewEl).attr('checked', value);
 						return;
 					}
 
 					if(_.isString(value)) {
-						//INPUT - type = date
+						//if INPUT type = date
 						if($(viewEl).prop("type") == 'date')
-							value = $.format.date(new Date(value), 'yyyy-MM-dd');
+						{
+							format = $(viewEl).data("format")	
+							if(_.isUndefined(format))
+								format = Nexus.ModelBinder.defaultDataFormat; //html5 type=date Only works with ISO date format
+							console.log(format);
+							value = $.format.date(new Date(value), format);
+						}
 						
 						viewEl.val(value);
 					}
@@ -83,8 +94,6 @@ _.extend(Nexus.ModelBinder.prototype, {
 		});
 
 	}
-
-	
 });
 
 
