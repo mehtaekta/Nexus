@@ -1,18 +1,18 @@
 
 
-Nexus.ModelBinder=function(options){
+Backbone.ModelBinder=function(options){
 	this.options =  _.extend({},options);
 };
 
-Nexus.ModelBinder.defaultDataFormat = "dd/MM/yyyy"; //Date Format
-Nexus.ModelBinder.defaultDataTimeFormat = "dd/MM/yyyy hh:mm:ss"; //Date Time format
+Backbone.ModelBinder.defaultDataFormat = "dd/MM/yyyy"; //Date Format
+Backbone.ModelBinder.defaultDataTimeFormat = "dd/MM/yyyy hh:mm:ss"; //Date Time format
 // Nexus.ModelBinder.emailPattern = ""; //email pattern to validate
 
 // bind method to ModelBinder object
-_.extend(Nexus.ModelBinder.prototype, {
+_.extend(Backbone.ModelBinder.prototype, {
 	bindSelectOptions:function(dataSource, selectedValue, selectEl, callback){
 		optionsData =  _.extend({}, dataSource);
-		console.log(selectedValue);
+		// console.log(selectedValue);
 		var resultSet = [];
 		resultSet.push({key:0, value:"Please Select"})
 		 _.each(optionsData, function(value, key){
@@ -36,6 +36,8 @@ _.extend(Nexus.ModelBinder.prototype, {
 
 	bindData:function(child) {
 		data = _this.modelData[child.prop("id")];
+		
+			// return;
 		// console.log(_this.modelData);
 		// console.log(child.prop('tagName'), child.attr('type'), child.prop("id"));
 		switch (child.prop('tagName')) {
@@ -56,7 +58,7 @@ _.extend(Nexus.ModelBinder.prototype, {
 					case 'checkbox':
 					case 'radio':
 						child.bind('click', _this.inputCheckBoxRadioOnClick)
-						if(_.isBoolean(data)) {
+						if(_.isUndefined(data) ==false && _.isBoolean(data)) {
 							child.attr('checked', data);
 						}
 						break;
@@ -65,13 +67,14 @@ _.extend(Nexus.ModelBinder.prototype, {
 						child.bind('change', _this.inputTextOnChange)
 						if(_.isUndefined(format))
 							format = Nexus.ModelBinder.defaultDataFormat; //html5 type=date Only works with ISO date format
-						console.log(format);
-						data = $.format.date(new Date(data), format);
-						child.val(data);
+						if(_.isUndefined(data) == false)
+							data = $.format.date(new Date(data), format);
+							child.val(data);
 						break;
 					default:
 						child.bind('change', _this.inputTextOnChange)
-						child.val(data);
+						if(_.isUndefined(data) == false)
+							child.val(data);
 						break;
 				}
 				break;
@@ -108,17 +111,17 @@ _.extend(Nexus.ModelBinder.prototype, {
 
 	selectOnChange:function(){
 		// console.log($(this).prop('id'), $(this).find(':selected').prop('id'));
-		_this.model[$(this).prop('id')] = $(this).find(':selected').prop('id');
+		_this.model.set($(this).prop('id'),$(this).find(':selected').prop('id'));
 	},
 
 	inputTextOnChange:function(){
-		// console.log($(this).prop('id'), $(this).val());
-		_this.model[$(this).prop('id')] = $(this).val();
+		console.log($(this).prop('id'), $(this).val());
+		_this.model.set($(this).prop('id'),$(this).val());
 	},
 
 	inputCheckBoxRadioOnClick:function(){
 		// console.log($(this).prop('id'), $(this).prop('checked') ? true : false);
-		_this.model[$(this).prop('id')] = $(this).prop('checked') ? true : false;
+		_this.model.set($(this).prop('id'),$(this).prop('checked') ? true : false);
 	}
 
 });

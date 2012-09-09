@@ -1,6 +1,6 @@
 $(function() {
 	// Instantiate the router
-	var app_router = new AppRouter();
+	Nexus.app_router = new Nexus.AppRouter();
 
 	// Start Backbone history a neccesary step for bookmarkable URL's
 	if (typeof(window.history.pushState) == 'function') {
@@ -12,14 +12,14 @@ $(function() {
 
 
 
-var AppView = Backbone.View.extend({
+Nexus.AppView = Backbone.View.extend({
 	el: $('#nexus-container'),
 	events:{
 		'submit .nexus-post-form': "_postform"
 	},
 
 	initialize: function(){
-		this.modelBinder = new Nexus.ModelBinder();
+		this.modelBinder = new Backbone.ModelBinder();
 		this.model.on('change', this.render, this);
 	},
 
@@ -32,19 +32,33 @@ var AppView = Backbone.View.extend({
 		});		
 	},
 
-	_postform: function() {
-		console.log(this.model);
+	_postform: function(e) {
+		e.preventDefault();
+		jsonData = this.model.attributes;
+		action = window.document.forms[0].action
+		jsonData.nextAction = window.document.forms[0].nextAction.value;
+
+		this.model.set('template', '');
+				
+		appModel.url = action;
+		appModel.save(jsonData, {
+			success: function(model, response) {
+				 // console.log('response', response);
+				 Nexus.app_router.navigate(response.action);
+				// appView._setModelContent();
+			}
+    	});	
 	},
 
 	render: function(){
-		console.log(this.model);
+		// console.log(this.model);
 		this.$el.html(this.model.get("template"));	
 		this.modelBinder.bind(this.model, this.$el);
 	}
 
 });
 
-var AppModel = Backbone.Model.extend({
+Nexus.AppModel = Backbone.Model.extend({
 
 	defaults: {
 		templateName: "login",
@@ -62,14 +76,14 @@ var AppModel = Backbone.Model.extend({
 	
 });
 
-var AppRouter = Backbone.Router.extend({
+Nexus.AppRouter = Backbone.Router.extend({
 	appView:{},
 	appModel:{},
 
 	initialize: function() {
 		var pathname=window.location.pathname;
-		appModel = new AppModel();
-		appView = new AppView({model:appModel});
+		appModel = new Nexus.AppModel();
+		appView = new Nexus.AppView({model:appModel});
 	}, 
 
 	routes: {

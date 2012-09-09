@@ -1,8 +1,9 @@
 <!-- TODO: change url of image -->
 <div>
-	<form class="form-horizontal nexus-post-form" id="register" name="register" action="account/register" method="POST">
+	<form class="form-horizontal nexus-post-form" id="register" name="register" action="/account/register" method="POST">
 	    <fieldset>
 	      	<legend>Register</legend>
+	      	<input type="hidden" id="nextAction" name = "nextAction" value="/account/registration_confirmation" />
 	      	<div id="infoText" name="infoText"></div>
 	      	<div class="control-group">
 	        	<label class="control-label" for="firstName">First Name: </label>
@@ -39,19 +40,19 @@
 	      	<div class="control-group">
 	        	<label class="control-label" for="last_name">Password: </label>
 	        	<div class="controls">
-	          		<input id="password" name="password" class="span2" required type="password" title="Password is Required!" />
+	          		<input id="password" name="password" class="span2" required type="password" title="Password is Required!" value="ekta" />
 	        	</div>
 	      	</div>
 	      	<div class="control-group">
 	        	<label class="control-label" for="last_name">Confirm Password: </label>
 	        	<div class="controls">
-	          		<input id="confirmPassword" name="confirmPassword" required class="span2" type="password" title="Confirm Password is Required!"  />
+	          		<input id="confirmPassword" name="confirmPassword" required class="span2" type="password" title="Confirm Password is Required!" value="ekta"  />
 	        	</div>
 	      	</div>
 	      	<div class="control-group">
 		        <div class="controls">
 		            <label class="checkbox">
-		              <input id="acceptTAndC" name ="acceptTAndC" type="checkbox" required />
+		              <input id="acceptTAndC" name ="acceptTAndC" checked type="checkbox" required />
 		              I have read and accept Terms of Use.
 		            </label>
 		    	</div>

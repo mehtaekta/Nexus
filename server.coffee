@@ -8,6 +8,7 @@ require("zappajs") port, ->
 	@set 'view engine': 'html', 'views': __dirname + "/public/views", 'view options': { layout: false }
 
 	@use static: __dirname + '/public',
+		'bodyParser',
 		single_page({ indexPage: 'views/index.html'}),
 
 	@get '/:action/:name?':->
@@ -28,4 +29,7 @@ require("zappajs") port, ->
 	@post '/:action/:name?' :->
 		res = @response
 		req = @request
+
+		res.json({action: req.body.nextAction}, 200)	
+		# console.log 'data', req.body
 		
