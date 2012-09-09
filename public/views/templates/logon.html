@@ -2,7 +2,7 @@
 <div>
   <form class="form-horizontal" id="login" name="login" action="login" method="POST">
     <fieldset>
-      <legend>Login</legend>
+      <legend>Login <span class="pull-right">Not a member? <a href='/account/register'>Register</a><span></legend>
       <!-- <div><label class='serverError'>{{errorMsg}}</label></div> -->
       <div class="control-group">
         <label class="control-label" for="email">Email: </label>
@@ -26,7 +26,7 @@
       </div>
       <div class="form-actions">
         <button class="btn btn-primary" type="submit">Login</button>
-        <button class="btn">Cancel</button>
+        <a href="/" class="btn">Cancel</a>
       </div>
     </fieldset>    
   </form>

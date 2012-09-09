@@ -15,7 +15,7 @@ $(function() {
 Nexus.AppView = Backbone.View.extend({
 	el: $('#nexus-container'),
 	events:{
-		'submit .nexus-post-form': "_postform"
+		'submit form.nexus-post-form': "_postform"
 	},
 
 	initialize: function(){
@@ -44,7 +44,7 @@ Nexus.AppView = Backbone.View.extend({
 		appModel.save(jsonData, {
 			success: function(model, response) {
 				 // console.log('response', response);
-				 Nexus.app_router.navigate(response.action);
+				 Nexus.app_router.navigate(response.action, {trigger:true, replace:true});
 				// appView._setModelContent();
 			}
     	});	

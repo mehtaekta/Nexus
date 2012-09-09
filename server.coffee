@@ -1,5 +1,7 @@
 port = Number(process.env.PORT || 5000)
 data = require('./businesslayer/stubData').data
+_=require('underscore')
+localStorage = require('localStorage')
 
 require("zappajs") port, ->
 	single_page = require('./middleware/nexus_single_page');
@@ -19,17 +21,20 @@ require("zappajs") port, ->
 		if req.params.name
 			action = req.params.name
 
-		jsonData = data[action]
+		jsonData = _.extend({}, data[action])
 		jsonData.templateName = action
 		jsonData.pageTitle = action
+
+		# console.log "api", action, jsonData
 		res.json(jsonData)
-		# console.log "api", action, data[action]
-		# res.json({mustacheTemplateName: action, payload: data[action], pageTitle: action})
 
 	@post '/:action/:name?' :->
 		res = @response
 		req = @request
 
-		res.json({action: req.body.nextAction}, 200)	
 		# console.log 'data', req.body
+		localStorage.setItem('postData', JSON.stringify(req.body))
+		console.log localStorage.getItem('postData')
+		res.json({action: req.body.nextAction}, 200)	
+		
 		
