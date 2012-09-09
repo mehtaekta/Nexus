@@ -14,36 +14,32 @@ $(function() {
 
 var AppView = Backbone.View.extend({
 	el: $('#nexus-container'),
+	events:{
+		'submit .nexus-post-form': "_postform"
+	},
 
 	initialize: function(){
 		this.modelBinder = new Nexus.ModelBinder();
 		this.model.on('change', this.render, this);
 	},
 
-	_mustacheRender: function(template, payload){
-		var output = Mustache.render(template, payload);
-		this.model.set({content: output, timestamp : new Date()});
-	},
-
 	_setModelContent: function(){
 		var _this = this;
-		var mustacheTemplateName = Nexus.templateDir + _this.model.get("mustacheTemplateName") + '.html';
+		var templateName = Nexus.templateDir + _this.model.get("templateName") + '.html';
 		
-		var payload = _this.model.get("payload");
-		// console.log('mustacheTemplateName =	', mustacheTemplateName);
-		// console.log('payload =	', payload);
-		$.get(mustacheTemplateName, function(template) {
+		$.get(templateName, function(template) {
 			_this.model.set({template:template})
-			// _this._mustacheRender(template, payload);	
 		});		
 	},
 
+	_postform: function() {
+		console.log(this.model);
+	},
+
 	render: function(){
+		console.log(this.model);
 		this.$el.html(this.model.get("template"));	
-		// console.log(this.modelBinder);
-		// debugger;
 		this.modelBinder.bind(this.model, this.$el);
-			
 	}
 
 });
@@ -51,11 +47,8 @@ var AppView = Backbone.View.extend({
 var AppModel = Backbone.Model.extend({
 
 	defaults: {
-		mustacheTemplateName: "login",
-		payload: {},
-		pageTitle: "Nexus",
-		content: "",
-		template: ""
+		templateName: "login",
+		pageTitle: "Nexus"
 	},        
 	initialize: function() {
 

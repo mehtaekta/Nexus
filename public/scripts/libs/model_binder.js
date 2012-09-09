@@ -34,6 +34,63 @@ _.extend(Nexus.ModelBinder.prototype, {
 		});
 	},
 
+	bindData:function(child) {
+		data = _this.modelData[child.prop("id")];
+		// console.log(_this.modelData);
+		// console.log(child.prop('tagName'), child.attr('type'), child.prop("id"));
+		switch (child.prop('tagName')) {
+			case 'DIV':
+				child.html(data);
+				break;
+			case 'SPAN':
+				child.html(data);
+				break;
+			case 'SELECT':
+				dataSource = _this.modelData[child.data("source")];
+				child.bind('change', _this.selectOnChange)
+				if(_.isObject(dataSource))
+					_this.bindSelectOptions(dataSource, data, child, null);
+				break;
+			case 'INPUT':
+				switch (child.attr('type')) {
+					case 'checkbox':
+					case 'radio':
+						child.bind('click', _this.inputCheckBoxRadioOnClick)
+						if(_.isBoolean(data)) {
+							child.attr('checked', data);
+						}
+						break;
+					case 'date':
+						format = child.data("format")	
+						child.bind('change', _this.inputTextOnChange)
+						if(_.isUndefined(format))
+							format = Nexus.ModelBinder.defaultDataFormat; //html5 type=date Only works with ISO date format
+						console.log(format);
+						data = $.format.date(new Date(data), format);
+						child.val(data);
+						break;
+					default:
+						child.bind('change', _this.inputTextOnChange)
+						child.val(data);
+						break;
+				}
+				break;
+		}
+	},
+
+	iterateElement:function(childrens) {
+	  if (typeof childrens == "undefined" || childrens.size() === 0) {
+	    return;
+	  }
+	  childrens.each(function(){
+	    var child = $(this);
+	    if (child.children().size() > 0) {
+	      _this.iterateElement(child.children());
+	    }
+	    _this.bindData(child);
+	  });
+	},
+
 	bind:function(model, el){
 		_this = this;
 		_this.model = model;
@@ -42,58 +99,28 @@ _.extend(Nexus.ModelBinder.prototype, {
 		if (!_this.model) throw 'model is undefined';
         if (!_this.el) throw 'element is undefined';
 
-        _this.modelData = _this.model.attributes.payload;
+        _this.modelData = _this.model.attributes;
         if (!_this.modelData) throw 'payload is undefined';
+		
+		_this.iterateElement(_this.el.children());
 
-		_.each(_this.modelData, function(value, key){
-			el_Id = '#'+key;
-			viewEl = $(el).find(el_Id);
-			// console.log('Element type and tagName' , $(viewEl).prop('type'), $(viewEl).prop('tagName'));
+	},
 
-			//TODO refactor to switch case???
-			if(!_.isUndefined(viewEl))
-			{
-				//SELECT
-				if($(viewEl).prop('tagName') == 'SELECT') {
-					_this.dataSource = _this.modelData[$(viewEl).data("source")];
-					if(_.isObject(_this.dataSource))
-						_this.bindSelectOptions(_this.dataSource, value, viewEl, null);
-						return;
-				}
+	selectOnChange:function(){
+		// console.log($(this).prop('id'), $(this).find(':selected').prop('id'));
+		_this.model[$(this).prop('id')] = $(this).find(':selected').prop('id');
+	},
 
-				//DIV or SPAN
-				if($(viewEl).prop('tagName') == 'DIV' || $(viewEl).prop('tagName') == 'SPAN') {
-					$(viewEl).html(value);
-					return;
-				}
+	inputTextOnChange:function(){
+		// console.log($(this).prop('id'), $(this).val());
+		_this.model[$(this).prop('id')] = $(this).val();
+	},
 
-				//INPUT
-				if($(viewEl).prop('tagName') == 'INPUT') {
-					//if INPUT type = Checkbox or RadioButton
-					if(($(viewEl).prop('type') == 'checkbox' || $(viewEl).prop('type') == 'radiobutton') && _.isBoolean(value)) {
-						$(viewEl).attr('checked', value);
-						return;
-					}
-
-					if(_.isString(value)) {
-						//if INPUT type = date
-						if($(viewEl).prop("type") == 'date')
-						{
-							format = $(viewEl).data("format")	
-							if(_.isUndefined(format))
-								format = Nexus.ModelBinder.defaultDataFormat; //html5 type=date Only works with ISO date format
-							console.log(format);
-							value = $.format.date(new Date(value), format);
-						}
-						
-						viewEl.val(value);
-					}
-				}
-
-			}
-		});
-
+	inputCheckBoxRadioOnClick:function(){
+		// console.log($(this).prop('id'), $(this).prop('checked') ? true : false);
+		_this.model[$(this).prop('id')] = $(this).prop('checked') ? true : false;
 	}
+
 });
 
 

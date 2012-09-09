@@ -18,8 +18,12 @@ require("zappajs") port, ->
 		if req.params.name
 			action = req.params.name
 
+		jsonData = data[action]
+		jsonData.templateName = action
+		jsonData.pageTitle = action
+		res.json(jsonData)
 		# console.log "api", action, data[action]
-		res.json({mustacheTemplateName: action, payload: data[action], pageTitle: action})
+		# res.json({mustacheTemplateName: action, payload: data[action], pageTitle: action})
 
 	@post '/:action/:name?' :->
 		res = @response
