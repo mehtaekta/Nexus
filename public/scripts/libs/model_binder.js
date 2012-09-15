@@ -42,8 +42,7 @@ _.extend(Backbone.ModelBinder.prototype, {
 		// console.log(child.prop('tagName'), child.attr('type'), child.prop("id"));
 		switch (child.prop('tagName')) {
 			case 'DIV':
-				child.html(data);
-				break;
+			case 'LABEL':
 			case 'SPAN':
 				child.html(data);
 				break;

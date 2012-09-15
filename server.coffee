@@ -1,40 +1,50 @@
-port = Number(process.env.PORT || 5000)
+express = require('express')
+_ = require 'underscore'
+localStorage = require 'localStorage'
+
 data = require('./businesslayer/stubData').data
-_=require('underscore')
-localStorage = require('localStorage')
 
-require("zappajs") port, ->
-	single_page = require('./middleware/nexus_single_page');
+app = module.exports = express.createServer()
+app.configure( ->
+	singlePage = require './middleware/nexus_single_page'
 
-	@register html: require('ejs') 
-	@set 'view engine': 'html', 'views': __dirname + "/public/views", 'view options': { layout: false }
+	# Register view engine
+	app.register('.html', require('ejs'));
 
-	@use static: __dirname + '/public',
-		'bodyParser',
-		single_page({ indexPage: 'views/index.html'}),
+	# App Configuration
+	app.set 'views', __dirname + "/public/"
+	app.set 'view engine', 'ejs'
+	app.set 'view options', { layout: false, pretty: true }
 
-	@get '/:action/:name?':->
-		res = @response
-		req = @request
+	# Middleware
+	app.use express.static(__dirname + '/public')
+	app.use express.bodyParser()
+	app.use(singlePage({indexPage: 'views/index.html'}))
+	
+)
 
-		action = req.params.action
-		if req.params.name
-			action = req.params.name
+app.get '/:action/:name?', (req, res) ->
+	action = req.params.action
+	if req.params.name
+		action = req.params.name
 
-		jsonData = _.extend({}, data[action])
-		jsonData.templateName = action
-		jsonData.pageTitle = action
+	jsonData = _.extend({}, data[action])
+	jsonData.templateName = action
+	jsonData.pageTitle = action
 
-		# console.log "api", action, jsonData
-		res.json(jsonData)
+	if localStorage.getItem('postData') != null
+		data =  localStorage.getItem('postData')
+		jsonData = _.extend(jsonData, data)
 
-	@post '/:action/:name?' :->
-		res = @response
-		req = @request
+	console.log "api", action, jsonData
+	res.json(jsonData)
 
-		# console.log 'data', req.body
-		localStorage.setItem('postData', JSON.stringify(req.body))
-		console.log localStorage.getItem('postData')
-		res.json({action: req.body.nextAction}, 200)	
-		
-		
+app.post '/:action/:name?', (req, res)->
+
+	# console.log 'data', req.body
+	localStorage.setItem('postData', req.body, {expires:100000})
+	res.json({action: req.body.nextAction}, 200)
+
+port = process.env.PORT or 5000
+app.listen port, '127.0.0.1'
+console.log("Express server listening on port %d in %s mode", port, app.settings.env)
