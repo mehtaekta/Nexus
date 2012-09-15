@@ -46,5 +46,5 @@ app.post '/:action/:name?', (req, res)->
 	res.json({action: req.body.nextAction}, 200)
 
 port = process.env.PORT or 5000
-app.listen port, '127.0.0.1'
+app.listen port
 console.log("Express server listening on port %d in %s mode", port, app.settings.env)
